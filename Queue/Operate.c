@@ -18,6 +18,7 @@ int enQueue(Queue* queue, Item item){
     if(*tail > QUEUE_SIZE){
         *tail = 0;
     }
+    queue->length++;
     return QUEUE_OK;
 }
 
@@ -36,5 +37,6 @@ int deQueue(Queue* queue, Item* item){
     if(*head > QUEUE_SIZE){
         *head = 0;
     }
+    queue->length--;
     return QUEUE_OK;
 }

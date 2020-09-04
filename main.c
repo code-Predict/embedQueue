@@ -2,6 +2,8 @@
  * キュー 
 */
 #include <stdio.h>
+#include <pthread.h>
+#include "Threads.h"
 #include "Queue.h"
 
 int main(int argc, char const *argv[]) {
@@ -10,28 +12,16 @@ int main(int argc, char const *argv[]) {
     Q = &queue;
     initQueue(Q);
 
-    // enQueue
-    Item item;
+    // enQueueスレッド・deQueueスレッドを立てる
+    QueueConf conf;
+    conf.Q = Q;
+    conf.timeout = 10;
 
-    int rst = 0, cnt = 0;
-    while (rst == QUEUE_OK) {
-        initItem(&item);
-        item.id = cnt;
-        rst = enQueue(Q, item);
-        printf("result: %d, e: %d\n", rst, item.id);
-        cnt++;
-    }
-    printf("enQueue: %d\n", cnt);
+    pthread_t eqThread, dqThread;
+    pthread_create(&dqThread, NULL, deQueueThread, &conf);
+    pthread_create(&eqThread, NULL, enQueueThread, &conf);
 
-    cnt = 0;
-    rst = 0;
-    while (rst == QUEUE_OK) {
-        initItem(&item);
-        rst = deQueue(Q, &item);
-        printf("result: %d, d: %d\n", rst, item.id);
-        cnt++;
-    }
-    printf("deQueue: %d\n", cnt);
+    pthread_join(dqThread, NULL);
     
     deinitQueue(Q);
     return 0;
