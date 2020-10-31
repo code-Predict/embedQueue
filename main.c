@@ -2,33 +2,33 @@
  * キュー 
 */
 #include <stdio.h>
-#include <pthread.h>
-#include "QueueThreads.h"
 #include "Queue.h"
 
 int main(int argc, char const *argv[]) {
-    // キュー初期化
+    // キュー初期
     Queue queue, *Q;
     Q = &queue;
     initQueue(Q);
 
-    // enQueueスレッド・deQueueスレッドを立てる
-    int endReq = 0;
-    QueueConf conf;
-    conf.Q = Q;
-    conf.timeout = 10;
-    conf.endReq = &endReq;
+    // いくつかenQueue
+    Item eqItem;
+    for(int i = 0; i < 10; i++){
+        printf("enQueue: %d\n", i);
+        eqItem.id = i;
+        enQueue(Q, eqItem);
+    }
 
-    pthread_t eqThread, dqThread;
-    pthread_create(&dqThread, NULL, deQueueThread, &conf);
-    pthread_create(&eqThread, NULL, enQueueThread, &conf);
+    // 空になるまでdeQueue
+    Item dqItem;
+    int status = QUEUE_OK;
+    char strBuffer[100];
+    memset(strBuffer, 0, 100);
+    while (status != QUEUE_EMPTY) {
+        status = deQueue(Q, &dqItem);
+        dumpItem(&dqItem, strBuffer);
+        printf("%s\n", strBuffer);
+    }
 
-    //
-    printf("Type any key to endReq.\n");
-    while(getc(stdin) != '\n');
-    *(conf.endReq) = 1;
-    printf("## endReq ##\n");
-    
     deinitQueue(Q);
     return 0;
 }

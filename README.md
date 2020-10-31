@@ -1,18 +1,42 @@
-# Queue
+# embedQueue
 
 ## Overview
 
-Generic queue implement written in C.(It supports multi-thread queue using pthread and mutex.)  
+Generic queue implement written in C.  
+**NOTE:** this repository is **minimized edition** for embedded device.  
+Some features such multithreading queue is shrinked or abolished.
 
 ## Usage
 
+### Generate sample program
+
  1. clone this repository.
- 1. `make` to generate `Queue.dll`. (If you only make `Queue.h`, you can use `make Queue.dll`.)
+ 1. to generate `Queue.dll` and `a.out`(example program), please execute `make`/.
 
-### How to embed it to your projects
+### Embed it to your projects
 
-If you use queue with single-thread system, you only need include `Queue.h`.  
-But, queue will be used with multi-thread system generally. In this case, you need include `QueueThreads.h` additional.  
+First, please clone or download this repository and put to your project directory.  
+And then, insert `#include`. for example:  
+
+```C
+    #include "Queue/Queue.h"
+
+    int main(void){
+        // Queue initialize
+        Queue queue, *Q;
+        Q = &queue;
+        initQueue(Q);
+
+        // enQueue
+        Item eqItem;
+        initItem(&eqItem);
+        eqItem.id = 1234;
+        enQueue(Q, eqItem);
+
+        while(1){
+        }
+    }
+```
 
 ## Licence
 

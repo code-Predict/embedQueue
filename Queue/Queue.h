@@ -8,14 +8,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* -------- */
-#include <stdio.h>
-#include <string.h>
-#include <pthread.h>
-#include <assert.h>
-#include <errno.h>
-#include <sys/time.h>
-
 #define NDEBUG
 
 #define QUEUE_SIZE 100000
@@ -24,11 +16,12 @@ extern "C" {
 #define QUEUE_FULL 1
 #define QUEUE_EMPTY 2
 
-#ifndef uint8_t
-    #define uint8_t unsigned char
-#endif
-
 /* -------- */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct item {
     int id;
     uint8_t data[8];
@@ -40,24 +33,14 @@ typedef struct queue {
     int head;
     int tail;
     int length;
-
-    // Thread
-    pthread_mutex_t mutex;
-
-    pthread_cond_t isNotEmpty;
-    pthread_cond_t isNotFull;
-
-    pthread_cond_t isDequeueFinished;
-    pthread_cond_t isEnqueueFinished;
-
 } Queue;
 
-typedef struct queueconf {
-    Queue* Q;
-    int timeout;
-    int* endReq;
+// typedef struct queueconf {
+//     Queue* Q;
+//     int timeout;
+//     int* endReq;
 
-} QueueConf;
+// } QueueConf;
 
 
 /* -------- */
@@ -75,14 +58,6 @@ void dumpu8Array(uint8_t *data, int length, char *buffer);
 // Operate.c
 int enQueue(Queue* queue, Item item);
 int deQueue(Queue* queue, Item* item);
-
-//MTSOperate.c
-int enQueueMT(Queue* queue, Item item);
-int deQueueMT(Queue* queue, Item* item);
-int waitForenQueue(Queue* queue, int timeout);
-int waitFordeQueue(Queue* queue, int timeout);
-void calcTimeSpec(struct timespec* ts, int timeout);
-int waitSignal(pthread_mutex_t* mutex, pthread_cond_t* cond, struct timespec* ts);
 
 #ifdef __cplusplus
 }
