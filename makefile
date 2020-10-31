@@ -1,18 +1,18 @@
-queuePath = -I Queue/ -I DqThread -I Threads
+queuePath = -I Queue/ -I DqThread -I QueueThreads
 includePath = $(queuePath)
 
 # for C
-a.out: main.c Queue.dll Threads.dll
-	gcc $(includePath) Queue.dll Threads.dll main.c -pthread
+a.out: main.c Queue.dll QueueThreads.dll
+	gcc $(includePath) Queue.dll QueueThreads.dll main.c -pthread
 
 #for C++
 cpp: main.cpp Queue.dll 
 	gcc $(includePath) Queue.dll main.cpp
 
-Threads.dll: Threads/Threads.h Threads/DqThread.c Threads/EqThread.c
-	gcc $(includePath) -c Threads/DqThread.c -pthread
-	gcc $(includePath) -c Threads/EqThread.c -pthread
-	gcc $(includePath) Queue.dll DqThread.o EqThread.o -fPIC -shared -o Threads.dll -pthread
+QueueThreads.dll: QueueThreads/QueueThreads.h QueueThreads/DqThread.c QueueThreads/EqThread.c
+	gcc $(includePath) -c QueueThreads/DqThread.c -pthread
+	gcc $(includePath) -c QueueThreads/EqThread.c -pthread
+	gcc $(includePath) Queue.dll DqThread.o EqThread.o -fPIC -shared -o QueueThreads.dll -pthread
 
 Queue.dll: Queue/Queue.h Queue/Dump.c Queue/Initializer.c Queue/Operate.c Queue/MTSOperate.c
 	gcc $(queuePath) -c Queue/Dump.c 

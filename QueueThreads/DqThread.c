@@ -1,7 +1,7 @@
 /*
  * 
 */
-#include "Threads.h"
+#include "QueueThreads.h"
 
 void *deQueueThread(void *_conf){
     // コンフィグからキューとタイムアウト時間を取り出す

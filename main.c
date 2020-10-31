@@ -3,7 +3,7 @@
 */
 #include <stdio.h>
 #include <pthread.h>
-#include "Threads.h"
+#include "QueueThreads.h"
 #include "Queue.h"
 
 int main(int argc, char const *argv[]) {
