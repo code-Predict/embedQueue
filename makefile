@@ -1,8 +1,13 @@
 queuePath = -I Queue/ -I DqThread -I Threads
 includePath = $(queuePath)
 
+# for C
 a.out: main.c Queue.dll Threads.dll
 	gcc $(includePath) Queue.dll Threads.dll main.c -pthread
+
+#for C++
+cpp: main.cpp Queue.dll 
+	gcc $(includePath) Queue.dll main.cpp
 
 Threads.dll: Threads/Threads.h Threads/DqThread.c Threads/EqThread.c
 	gcc $(includePath) -c Threads/DqThread.c -pthread

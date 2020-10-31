@@ -1,8 +1,12 @@
 /*
  * FIFOキュー 
 */
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef _QUEUE_H_
+#define _QUEUE_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /* -------- */
 #include <stdio.h>
@@ -80,4 +84,8 @@ int waitFordeQueue(Queue* queue, int timeout);
 void calcTimeSpec(struct timespec* ts, int timeout);
 int waitSignal(pthread_mutex_t* mutex, pthread_cond_t* cond, struct timespec* ts);
 
-#endif
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* _QUEUE_H_ */
