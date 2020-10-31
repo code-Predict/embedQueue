@@ -7,12 +7,12 @@ void *deQueueThread(void *_conf){
     // コンフィグからキューとタイムアウト時間を取り出す
     QueueConf conf = *(QueueConf *)_conf;
     Queue *queue = conf.Q;
+    int *endReq = conf.endReq;
 
     // enQueueされたら表示する タイムアウト時スレッド終了
-    int endReq = 0;
     int deQueueStat = QUEUE_OK, waitStat = 0;
     char buffer[35];
-    while(!endReq){
+    while(!(*endReq)){
         Item item;
         deQueueStat = deQueueMT(queue, &item);
 
@@ -22,12 +22,14 @@ void *deQueueThread(void *_conf){
         }else{
             waitStat = waitFordeQueue(queue, conf.timeout);
             if(waitStat == ETIMEDOUT){
-                endReq = 1;
+                *endReq = 1;
                 continue;
             }
         }
         usleep(1000);
     }
+
     printf("DeQueueThread: Timeout or detect signal.\n");
+    pthread_cond_broadcast(&(queue->isDequeueFinished));
     pthread_exit(NULL);
 }

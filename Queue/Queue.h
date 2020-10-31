@@ -39,13 +39,20 @@ typedef struct queue {
 
     // Thread
     pthread_mutex_t mutex;
+
     pthread_cond_t isNotEmpty;
     pthread_cond_t isNotFull;
+
+    pthread_cond_t isDequeueFinished;
+    pthread_cond_t isEnqueueFinished;
+
 } Queue;
 
 typedef struct queueconf {
     Queue* Q;
     int timeout;
+    int* endReq;
+
 } QueueConf;
 
 

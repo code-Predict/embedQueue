@@ -7,15 +7,15 @@ void *enQueueThread(void *_conf){
     // コンフィグからキューとタイムアウト時間を取り出す
     QueueConf conf = *(QueueConf *)_conf;
     Queue *queue = conf.Q;
+    int *endReq = conf.endReq;
+    int cnt = 0;
 
-    int endReq = 0, cnt = 0;
-
-    //10秒だけ怒涛のenQueue
+    //n秒だけ怒涛のenQueue
     time_t startTime;
     time(&startTime);
     int limit = 5;
 
-    while (!endReq) {
+    while (!*(endReq)) {
         char buffer[8] = "enQueue";
         Item item;
         item.id = cnt;
@@ -37,10 +37,12 @@ void *enQueueThread(void *_conf){
 
         // 指定時間経過?
         if((time(NULL) - startTime) > limit){
-            endReq = 1;
+            *endReq = 1;
             continue;
         }
     }
+
     printf("enQueue Process finished.\n");
+    pthread_cond_broadcast(&(queue->isEnqueueFinished));
     pthread_exit(NULL);
 }

@@ -20,6 +20,10 @@ int initQueue(Queue* queue){
     assert(rst == 0);
     rst = pthread_cond_init(&queue->isNotFull, NULL);
     assert(rst == 0);
+    rst = pthread_cond_init(&queue->isDequeueFinished, NULL);
+    assert(rst == 0);
+    rst = pthread_cond_init(&queue->isEnqueueFinished, NULL);
+    assert(rst == 0);
     return rst;
 }
 
@@ -28,6 +32,10 @@ int deinitQueue(Queue* queue){
     rst = pthread_cond_destroy(&queue->isNotEmpty);
     assert(rst == 0);
     rst = pthread_cond_destroy(&queue->isNotFull);
+    assert(rst == 0);
+    rst = pthread_cond_destroy(&queue->isDequeueFinished);
+    assert(rst == 0);
+    rst = pthread_cond_destroy(&queue->isEnqueueFinished);
     assert(rst == 0);
     rst = pthread_mutex_destroy(&queue->mutex);
     assert(rst == 0);
